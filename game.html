@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Game</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
+    />
+
+    <style>
+      .container {
+        background-color: #a091d6;
+        padding-top: 60px;
+        padding-bottom: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: white;
+      }
+
+      #progressbar {
+        width: 500px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+
+      #add-btn,
+      #reduce-btn {
+        background-color: #8a7cbe;
+        align-items: center;
+        width: 30px;
+        height: 30px;
+        padding: 5px;
+        text-align: center;
+        border-radius: 10px;
+        margin: 10px;
+        display: flex;
+        align-items: center;
+        box-shadow: 3px 3px 8px #6756a3;
+      }
+
+      .btn {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      input {
+        background-color: transparent;
+        border: none;
+        color: white;
+        text-align: center;
+      }
+
+      p,
+      li {
+        margin: auto;
+        text-transform: uppercase;
+
+        text-align: center;
+      }
+
+      img {
+        width: 200px;
+      }
+
+      .container h1 {
+        font-weight: 400;
+        letter-spacing: 5px;
+        margin-top: 50px;
+      }
+
+      #draggable p {
+        font-weight: 400;
+        letter-spacing: 5px;
+        margin-top: 50px;
+        margin-bottom: 10px;
+        text-align: left;
+      }
+
+      #draggable {
+        width: 350px;
+        height: 350px;
+        padding: 0.5em;
+        margin: auto;
+      }
+
+      #sortable {
+        list-style-type: none;
+        margin: auto;
+        margin-top: 30px;
+        padding: 0;
+        padding-bottom: 30px;
+        width: 60%;
+      }
+      #sortable li {
+        text-align: center;
+        padding: 5px;
+        font-size: 14px;
+        height: 18px;
+        margin: 10px;
+        border-radius: 20px;
+        background-color: #8a7cbe;
+        letter-spacing: 5px;
+        color: white;
+      }
+      .bottle {
+        width: 100px;
+        margin: auto;
+        text-align: center;
+        height: 300px;
+        background-color: #387970;
+      }
+
+      button {
+        margin: 30px;
+      }
+
+      .container p {
+        font-size: 20px;
+        font-style: italic;
+      }
+
+      .scale {
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+        margin-right: 30px;
+      }
+
+      .scale p {
+        font-size: 10px;
+        text-align: right;
+        margin-right: 0;
+      }
+
+      .drink {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      #chat1,
+      #chat2,
+      #chat3 {
+        background-color: #387970;
+        width: 500px;
+        border-radius: 20px;
+        padding: 5px;
+        margin-bottom: 50px;
+      }
+
+      #chat3 {
+        background-color: #d16565;
+      }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script>
+      var isRefill = true;
+      var isSpicy = true;
+      $(function () {
+        $("#chat1").hide();
+        $("#chat2").hide();
+        $("#chat3").hide();
+
+        //jquery ui widget
+        $("#progressbar").progressbar({
+          value: 10,
+        });
+
+        $("#add-btn").click(function () {
+          if ($("#progressbar").progressbar("option", "value") < 100) {
+            var val = $("#progressbar").progressbar("option", "value") + 5;
+            $("#progressbar").progressbar("option", "value", val);
+          } else {
+            setAlert();
+            // setAlert(() => {
+            //   alert("Too spicy!");
+            // });
+          }
+        });
+
+        $("#reduce-btn").click(function () {
+          if ($("#progressbar").progressbar("option", "value") > 0) {
+            var val = $("#progressbar").progressbar("option", "value") - 5;
+            $("#progressbar").progressbar("option", "value", val);
+          } else {
+            setAlert();
+            // setAlert(() => {
+            //   alert("Too spicy!");
+            // });
+          }
+        });
+
+        $("#myInput").tooltip();
+
+        //jquery ui interaction
+        $("#draggable").draggable();
+        $("#sortable").sortable();
+
+        //widget factory
+        $.widget("custom.drinkbar", {
+          options: {
+            value: 10,
+            change: null,
+            log: null,
+            disabled: false,
+          },
+
+          _create: function () {
+            var progress = this.options.value + "%";
+            this.element
+              .css({ "background-color": "#e8bf55", height: progress })
+              .text(progress);
+          },
+
+          _constrain: function (value) {
+            if (value > 100) {
+              value = 100;
+            }
+            if (value < 0) {
+              value = 0;
+            }
+            return value;
+          },
+
+          refresh: function () {
+            var progress = this.options.value + "%";
+            this.element
+              .css({ "background-color": "#e8bf55", height: progress })
+              .text(progress);
+          },
+
+          _setOptions: function (options) {
+            this._super(options);
+            this.refresh();
+          },
+
+          _setOption: function (key, value) {
+            if (key === "value") {
+              value = this._constrain(value);
+            }
+            this._super(key, value);
+          },
+        });
+
+        $("#drink").drinkbar({
+          value: 100,
+        });
+
+        $("#drink-btn").click(function () {
+          if (!$("#drink").drinkbar("option", "disabled")) {
+            if ($("#drink").drinkbar("option", "value") > 0) {
+              var val = $("#drink").drinkbar("option", "value") - 10;
+              $("#drink").drinkbar("option", "value", val);
+            } else {
+              displayChat();
+              // displayChat(
+              //   myChat,
+              //   otherChat,
+              //   "Congrats!",
+              //   "Now let's refill the soju!"
+              // );
+              if (isRefill) {
+                $("#drink").drinkbar("option", "value", 100);
+              }
+            }
+          }
+        });
+
+        $("#toggle-btn").click(function () {
+          if ($("#drink").drinkbar("option", "disabled")) {
+            console.log("enable");
+            $("#drink").drinkbar("enable");
+          } else {
+            console.log("disable");
+            $("#drink").drinkbar("disable");
+          }
+        });
+      });
+
+      // --------------- Callback ----------------- //
+
+      // function displayChat(callback1, callback2, message1, message2) {
+      //   callback1(message1);
+
+      //   setTimeout(() => callback2(message2), 2000);
+      // }
+
+      // function myChat(message) {
+      //   if (message) {
+      //     $("#chat1").append("<p>" + message + "</p>");
+      //     $("#chat1").show().delay(2000).fadeOut(1000);
+      //   }
+      // }
+
+      // function otherChat(message) {
+      //   if (message) {
+      //     $("#chat2").append("<p>" + message + "</p>");
+      //     $("#chat2").show().delay(2000).fadeOut(1000);
+      //   }
+      // }
+
+      // function setAlert(callback) {
+      //   setTimeout(callback, 1000);
+      // }
+
+      // --------------- Promise ----------------- //
+
+      // var sendMessage = function (progress) {
+      //   return new Promise(function (resolve, reject) {
+      //     if (progress === 0) {
+      //       resolve("Not spicy!");
+      //     } else if (progress > 0 && progress < 100) {
+      //       var val = progress - 5;
+      //       $("#progressbar").progressbar("option", "value", val);
+      //     } else {
+      //       reject(new Error("Ugh too spicy!"));
+      //     }
+      //   });
+      // };
+
+      // var setAlert = function () {
+      //   sendMessage($("#progressbar").progressbar("option", "value"))
+      //     .then(function (message) {
+      //       alert(message);
+      //     })
+      //     .catch(function (error) {
+      //       $("#dialog").empty().append('<p>Ugh, it is too spicy!</p>').dialog();
+      //     });
+      // };
+
+      // var myChat = function (message) {
+      //   return new Promise(function (resolve, reject) {
+      //     $("#chat1").empty();
+      //     $("#chat1").append("<p>Finish</p>");
+      //     $("#chat1").show().fadeOut(2000);
+      //     resolve(message);
+      //   });
+      // };
+
+      // var otherChat = new Promise(function (resolve, reject) {
+      //   if (isRefill) {
+      //     resolve("Now let's refill the soju!");
+      //   } else {
+      //     var reason = new Error("Cannot refill :(");
+      //     reject(reason);
+      //   }
+      // });
+
+      // var displayChat = function () {
+      //   otherChat
+      //     .then(myChat)
+      //     .then(function (message) {
+      //       $("#chat2").empty();
+      //       $("#chat2").append("<p>" + message + "</p>");
+      //       $("#chat2").show().delay(2000).fadeOut(1000);
+      //     })
+      //     .catch(function (error) {
+      //       $("#chat3").empty();
+      //       $("#chat3").append("<p>" + error.message + "</p>");
+      //       $("#chat3").show().delay(2000).fadeOut(1000);
+      //     });
+      // };
+
+      // --------------- Async & Await ----------------- //
+      async function setAlert() {
+        try {
+          const progress = $("#progressbar").progressbar("option", "value");
+          const message = await sendMessage(progress);
+          alert(message);
+        } catch (err) {
+          console.log(err);
+          $("#dialog").empty().append("<p>Ugh, it is too spicy!</p>").dialog();
+        }
+      }
+
+      function sendMessage(progress) {
+        return new Promise(function (resolve, reject) {
+          if (progress === 0) {
+            resolve("Not spicy!");
+          } else if (progress > 0 && progress < 100) {
+            var val = progress - 5;
+            $("#progressbar").progressbar("option", "value", val);
+          } else {
+            reject(new Error("Ugh too spicy!"));
+          }
+        });
+      }
+
+      async function displayChat() {
+        try {
+          const promise1 = await otherChat();
+          const promise2 = await myChat(promise1);
+          const message = promise2;
+          $("#chat2").empty();
+          $("#chat2").append("<p>" + message + "</p>");
+          $("#chat2").show().delay(2000).fadeOut(1000);
+        } catch (err) {
+          $("#chat3").empty();
+          $("#chat3").append("<p>" + err.message + "</p>");
+          $("#chat3").show().delay(2000).fadeOut(1000);
+        }
+      }
+
+      function otherChat() {
+        return new Promise(function (resolve, reject) {
+          if (isRefill) {
+            resolve("Now let's refill the soju!");
+          } else {
+            var reason = new Error("Cannot refill :(");
+            reject(reason);
+          }
+        });
+      }
+
+      function myChat(message) {
+        return new Promise(function (resolve, reject) {
+          $("#chat1").empty();
+          $("#chat1").append("<p>Finish</p>");
+          $("#chat1").show().fadeOut(2000);
+          resolve(message);
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div class="top-nav">
+      <img src="Logo/logo_text.png" alt="Delico" id="header-logo" />
+      <div class="menu-bar">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#special">Special</a>
+        <a href="search.html">Search</a>
+        <a href="game.html">Game</a>
+        <a href="contact-us.html">Contact Us</a>
+      </div>
+    </div>
+
+    <!-- jquery ui widget -->
+    <div class="container">
+      <h1>SPICY LEVEL</h1>
+      <input type="text" title="Menu Name" id="myInput" />
+      <div id="progressbar"></div>
+      <div class="btn">
+        <div id="reduce-btn"><p>–</p></div>
+        <div id="add-btn"><p>+</p></div>
+      </div>
+    </div>
+
+    <!-- jquery ui interaction -->
+    <div id="draggable">
+      <p>Drag Me!</p>
+      <img src="Images/ramen.jpeg" alt="ramen" />
+    </div>
+
+    <p>Rank Our Food!</p>
+    <ul id="sortable">
+      <li class="ui-state-default">Ramen</li>
+      <li class="ui-state-default">Bibimbab</li>
+      <li class="ui-state-default">Tteokbokki</li>
+      <li class="ui-state-default">Kimchi</li>
+      <li class="ui-state-default">Hotpot</li>
+      <li class="ui-state-default">Korean BBQ</li>
+      <li class="ui-state-default">Roasted Pork</li>
+    </ul>
+
+    <!-- widget factory -->
+    <div class="container">
+      <p>Let's Play Soju Game</p>
+      <div>
+        <button id="toggle-btn">Toggle Disable</button>
+        <button id="drink-btn">Drink</button>
+      </div>
+      <div class="drink">
+        <div class="scale">
+          <p>done!</p>
+          <p>Almost there!</p>
+          <p>Drink More!</p>
+          <p>Still a lot</p>
+        </div>
+        <div class="bottle">
+          <div id="drink"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" style="padding: 0">
+      <div id="chat1"></div>
+      <div id="chat2"></div>
+      <div id="chat3"></div>
+    </div>
+
+    <div id="dialog" title="Warning"></div>
+  </body>
+</html>

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <title>Delico</title>
+    <style>
+      .main-div {
+        background-color: black;
+        height: 100vh;
+      }
+
+      .main-div h1 {
+        margin: 0;
+      }
+
+      .layer {
+        background-image: url(Images/storekorea.jpeg);
+        background-size: cover;
+        background-repeat: no-repeat;
+        opacity: 0.8;
+        height: 100vh;
+      }
+
+      .group {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        height: 100%;
+        top: 0;
+        font-size: 20px;
+      }
+
+      .title {
+        color: white;
+        padding-right: 80px;
+      }
+
+      .menu,
+      .movie {
+        background-image: url(Images/squared-paper-texture.jpeg);
+        background-size: 100%;
+        padding: 50px;
+      }
+
+      .text {
+        text-align: center;
+        color: #387970;
+      }
+
+      .btn {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      td {
+        padding: 15px;
+        background-color: #a091d6;
+        border-radius: 10px;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+      }
+
+      td:nth-child(even) {
+        background-color: #e8bf55;
+        color: #387970;
+      }
+
+      table {
+        width: 80%;
+        margin: auto;
+      }
+
+      .checklist {
+        background-color: #387970;
+        color: white;
+        padding: 50px;
+      }
+
+      .checklist .text {
+        color: #e8bf55;
+      }
+
+      .checklist .text h1 {
+        margin-top: 0;
+      }
+
+      .book input,
+      select,
+      textarea {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 20px;
+        margin-top: 10px;
+        border: 0.5px solid black;
+        border-radius: 7px;
+      }
+
+      .book {
+        width: 50vw;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 50px;
+        margin-bottom: 50px;
+      }
+
+      .book h1 {
+        clear: both;
+        color: #387970;
+      }
+
+      input[type="color"] {
+        height: 50px;
+      }
+
+      #receipt {
+        background-color: #e8bf55;
+        width: 50%;
+        height: 400px;
+        margin: auto;
+        margin-bottom: 4rem;
+        padding: 2rem;
+        color: #387970;
+        box-shadow: 2px 2px 5px grey;
+      }
+
+      #receipt table {
+        text-align: left;
+        margin: 0;
+      }
+
+      #receipt button {
+        float: right;
+        margin-left: 10px;
+      }
+
+      .movie img,
+      .movie button {
+        width: 200px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        transition: width 2s, height 4s;
+      }
+
+      .movie img:hover {
+        width: 500px;
+      }
+
+      .movie button {
+        margin-top: 20px;
+      }
+
+      #playlist:hover {
+        transform: rotateX(360deg);
+        transition: transform 5s;
+      }
+
+      #partner {
+        height: 100px;
+      }
+
+      .partner-list {
+        padding: 50px;
+        text-align: center;
+      }
+
+      .partner-list .text {
+        margin-bottom: 2rem;
+        font-size: 16px;
+        font-weight: bold;
+      }
+    </style>
+
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+      var colors, intervalID, sources, intervalID2;
+      var totalCyles = 0;
+      var name;
+      var id = '000';
+      var idNum = 0;
+      var color = 0;
+      var idx = 0;
+
+      function init() {
+        colors = ["#387970", "#a091d6", "#e8bf55"];
+        sources = ["Logo/glico.png", "Logo/combank.png", "Logo/sm.png", "Logo/riot.png"];
+      }
+
+      function cycleColors() {
+        color = color == 2 ? 0 : ++color;
+
+        $("#week-special").css("color", colors[color]);
+
+        if (totalCyles++ < 100) {
+          intervalID = setTimeout("cycleColors()", 500);
+        } else {
+          clearTimeout(intervalID);
+        }
+      }
+
+      function cycleImages() {
+        idx = idx == 3 ? 0 : ++idx;
+        $("#partner").attr("src", sources[idx]);
+        setTimeout("cycleImages()", 1000);
+      }
+
+      function bookTable(form) {
+        if(validateForm(form)){
+          var myDiv = document.getElementById("receipt");
+          name = form.fname.value;
+          ++idNum;
+
+          var content = "";
+          content += "<h3>Booking Receipt</h3>";
+          content += "<table>";
+          content += "<tr>";
+          content += "<th>Name</th>";
+          content += "<td>" + form.fname.value + "</td>";
+          content += "</tr>";
+          content += "<tr>";
+          content += "<th>Quantity</th>";
+          content += "<td>" + form.quantity.value + "</td>";
+          content += "</tr>";
+          content += "<tr>";
+          content += "<th>Country</th>";
+          content += "<td>" + form.country.value + "</td>";
+          content += "</tr>";
+          content += "<tr>";
+          content += "<th>Phone</th>";
+          content += "<td>" + form.phone.value + "</td>";
+          content += "</tr>";
+          content += "<tr>";
+          content += "<th>Date Time</th>";
+          content += "<td>" + form.date.value + " " + form.time.value + "</td>";
+          content += "</tr>";
+          content += "<tr>";
+          content += "<th>Color Theme</th>";
+          content += "<td>" + form.color.value + "</td>";
+          content += "</tr>";
+          content += "</table>";
+          content += '<button onclick="writePage(this.form);">Confirm</button>';
+          content += '<button onclick="reset(); ">Reset</button>';
+
+          myDiv.innerHTML = content;
+          myDiv.hidden = false;
+        } else {
+          alert('Please fill the form properly.');
+        }
+      }
+
+      function reset() {
+        alert('Thanks!');
+        document.getElementById("receipt").innerHTML = "";
+        document.getElementById("receipt").hidden = true;
+        document.getElementById("myForm").reset();
+      }
+
+      function swipe() {
+        const image = document.getElementById("movie1");
+        const button = document.getElementById("next-btn");
+        const movieDesc = document.getElementById('movie-desc');
+
+        if (button.innerHTML == "Next") {
+          image.src = "Images/movie.jpeg";
+          button.innerHTML = "Back";
+          movieDesc.innerHTML = `
+          Sweet & Sour is a refreshingly realistic romantic 
+          comedy that depicts both the bliss of being in love 
+          as well as the tough times in a relationship. 
+          The movie follows Jang Hyeok and Jung Da-eun, who become a 
+          long-distance couple when Jang gets a new job opportunity.`;
+        } else {
+          image.src = "Images/event.jpeg";
+          button.innerHTML = "Next";
+          movieDesc.innerHTML = `
+          Moonlight is the reflection of the sun off the moon's surface — a clear
+          sky and a full moon provide brilliant moonlight. Smugglers hate
+          moonlight. If you moonlight, you work a second job, and it doesn't have
+          to be at night.`;
+        }
+      }
+
+      function validateForm(form) {
+        const pattern = /^[A-Z][a-z]{2,}\s[A-Z][a-z]/;
+        const phonePattern = /^0[0-9]{9}/;
+        let x = form.fname.value;
+        let phone = form.phone.value;
+        if (!x.match(pattern)) {
+          alert("Please enter name with capital letter on the start of each word. Example: John Smith");
+          return false;
+        }
+
+        if(!phone.match(phonePattern)){
+          alert("Phone number must contain 10 numbers and starts with 0");
+          return false;
+        }
+        return true;
+      }
+
+      function checkNumber(form) {
+        if(form.quantity.value == 0){
+          alert("Please enter the quantity more than 0");
+        } else {
+          return true;
+        }
+      }
+
+      function writePage(form) {
+        const myWindow = window.open();
+        const d = new Date();
+        myWindow.document.write("<h1>Booking Confirmation</h1>");
+        myWindow.document.write("<p>+++++++++++++++++++++++++++++++++++++++++++++++</p>");
+        myWindow.document.write(`<p>Date: ${d.toLocaleDateString()}<br>Subject: Delico Table Booking (${this.id + this.idNum})<br>To: ${this.name}</p>`);
+        myWindow.document.write(`<p>Hi, ${this.name}! Thank you for your booking.<br>We will contact you if there's any problem with the booking.<br>See you there!</p>`);
+        myWindow.document.write("<p>Kind Regards,<br>DELICO.</p>");
+        myWindow.document.write("<p>+++++++++++++++++++++++++++++++++++++++++++++++</p>");
+      }
+    </script>
+  </head>
+  <body onload="init(); cycleColors(); cycleImages();">
+    <div class="top-nav">
+      <img src="Logo/logo_text.png" alt="Delico" id="header-logo" />
+      <div class="menu-bar">
+        <a href="#home">Home</a>
+        <a href="#special">Special</a>
+        <a href="search.html">Search</a>
+        <a href="game.html">Game</a>
+        <a href="contact-us.html">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="main-div" id="home">
+      <div class="layer"></div>
+      <div class="group">
+        <img src="Logo/logo2.png" alt="Delico" />
+        <div class="title">
+          <h1>DELICO</h1>
+          <p>
+            We are a young network of Korean food enthusiast and entrepreneurs.
+            We are the modern restaurant with high quality of meals, great staff
+            and proffesional chefs. We depend on your dining satisfaction, fine
+            food, and honest feedback.
+          </p>
+          <button><a href="contact-us.html#explore">Explore</a></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu" id="special">
+      <div class="text">
+        <h1>
+          THIS WEEK'S <span class="green" id="week-special">SPECIALS</span>
+        </h1>
+        <p>
+          Delico Hour, $13.50 Roast Pork, $8 house drinks and much more! Stay on
+          with The Delico's Weekly Specials!
+        </p>
+      </div>
+      <div class="food d-flex">
+        <figure>
+          <img src="Images/menu/main.jpeg" alt="" />
+          <figcaption>ROAST PORK</figcaption>
+        </figure>
+        <figure>
+          <img src="Images/menu/rice.jpeg" alt="" />
+          <figcaption>BIBIMBAB</figcaption>
+        </figure>
+        <figure>
+          <img src="Images/menu/coffee.jpeg" alt="" />
+          <figcaption>DALGONA COFFEE</figcaption>
+        </figure>
+      </div>
+      <div class="btn">
+        <input type="button" value="Find out more" />
+      </div>
+    </div>
+
+    <div class="checklist">
+      <div class="text">
+        <h1>DELICO CHECK LISTS</h1>
+        <p>Maximize your experience at DELICO!</p>
+      </div>
+      <table>
+        <tr>
+          <td>
+            <input type="checkbox" id="phone" />
+            <label for="phone">Phone</label>
+          </td>
+          <td>
+            <input type="checkbox" id="friends" />
+            <label for="friends">Friends</label>
+          </td>
+          <td>
+            <input type="checkbox" id="money" />
+            <label for="money">Money</label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="checkbox" id="camera" />
+            <label for="camera">Camera</label>
+          </td>
+          <td>
+            <input type="checkbox" id="charger" />
+            <label for="charger">Charger</label>
+          </td>
+          <td>
+            <input type="checkbox" id="laptop" />
+            <label for="laptop">Laptop</label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="checkbox" id="mask" />
+            <label for="mask">Mask</label>
+          </td>
+          <td>
+            <input type="checkbox" id="bag" />
+            <label for="bag">Tote Bag</label>
+          </td>
+          <td>
+            <input type="checkbox" id="family" />
+            <label for="family">Family</label>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="card f-left">
+      <h1>Our Favourite</h1>
+      <figure class="thumbnail">
+        <img src="Images/tteokbokki.jpeg" alt="rice-cake" />
+        <div class="f-left">
+          <figcaption class="popup">
+            <img src="Images/tteokbokki.jpeg" alt="rice-cake" />
+            <p>
+              Tteokbokki, or simmered rice cake, is a popular Korean food made
+              from small-sized garae-tteok called tteokmyeon or commonly
+              tteokbokki-tteok. Eomuk, boiled eggs, and scallions are some
+              common ingredients paired with tteokbokki in dishes.
+            </p>
+          </figcaption>
+        </div>
+      </figure>
+    </div>
+
+    <div class="card f-right">
+      <h1>Best Price</h1>
+      <figure class="thumbnail">
+        <img src="Images/ramen.jpeg" alt="ramen" />
+        <div class="f-left">
+          <figcaption class="popup" style="left: 60vw">
+            <img src="Images/ramen.jpeg" alt="ramen" />
+            <p>
+              Ramyeon is one of South Korea's favourite comfort foods. It is
+              made up of dried, curly noodles, freeze-dried vegetables and a
+              sachet of powdered soup, and is rehydrated in boiling water to
+              make a quick, tasty meal.
+            </p>
+          </figcaption>
+        </div>
+      </figure>
+    </div>
+
+    <div class="book">
+      <h1>Book Your Table</h1>
+      <form onsubmit="return false;" id="myForm">
+        <div>
+          <label for="fname">Full Name</label>
+          <input
+            type="text"
+            name="fname"
+            id="fname"
+            placeholder="Please enter your full name."
+            required
+          />
+          <label for="quantity">Number of People</label>
+          <input
+            type="number"
+            name="quantity"
+            id="quantity"
+            placeholder="Please enter the number of people."
+            required
+            onchange="checkNumber(this.form)"
+          />
+        </div>
+        <div class="field d-flex">
+          <div>
+            <label for="country">Country</label>
+            <select name="country" id="country">
+              <option value="AU">Australia</option>
+              <option value="IDN">Indonesia</option>
+              <option value="NZ">New Zealand</option>
+              <option value="CN">Canada</option>
+            </select>
+          </div>
+          <div class="w-100">
+            <label for="phone">Phone</label>
+            <input
+              type="tel"
+              name="phone"
+              id="phone"
+              placeholder="Please enter your phone number."
+              required
+            />
+          </div>
+        </div>
+        <div>
+          <label for="date">Date</label>
+          <input
+            type="date"
+            name="date"
+            id="date"
+            placeholder="Please enter date."
+            required
+          />
+          <label for="time">Time</label>
+          <input
+            type="time"
+            name="time"
+            id="time"
+            placeholder="Please enter time."
+            required
+          />
+          <label for="color">Color Theme</label>
+          <input
+            type="color"
+            name="color"
+            id="color"
+            placeholder="Please pick a color."
+            required
+          />
+        </div>
+        <input type="submit" value="Submit" onclick="bookTable(this.form)" />
+      </form>
+    </div>
+
+    <div id="receipt" hidden="true"></div>
+
+    <div class="checklist">
+      <h1 class="text" id="playlist">TOP WEEKLY PLAYLIST</h1>
+
+      <iframe
+        style="border-radius: 12px"
+        src="https://open.spotify.com/embed/playlist/37i9dQZF1DX7ZHn4SQHDIn?utm_source=generator"
+        width="100%"
+        id="music"
+        height="380"
+        frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      ></iframe>
+    </div>
+
+    <div class="movie">
+      <h1 class="text">MOVIE OF THE DAY</h1>
+      <p class="text" id="movie-desc">
+        Moonlight is the reflection of the sun off the moon's surface — a clear
+        sky and a full moon provide brilliant moonlight. Smugglers hate
+        moonlight. If you moonlight, you work a second job, and it doesn't have
+        to be at night.
+      </p>
+      <img src="Images/event.jpeg" alt="moonlight" id="movie1" />
+      <button id="next-btn" onclick="swipe()">Next</button>
+    </div>
+
+    <div class="decoration">
+      <table>
+        <tr>
+          <td colspan="2">IF MUSIC</td>
+          <td>BE</td>
+        </tr>
+        <tr>
+          <td rowspan="2">THE</td>
+          <td colspan="2">FOOD OF</td>
+        </tr>
+        <tr>
+          <td>LOVE</td>
+          <td>PLAY ON</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="partner-list">
+      <p class="text">OUR PARTNER</p>
+      <img id="partner" src="Logo/glico.png" alt="partner">
+    </div>
+  </body>
+</html>

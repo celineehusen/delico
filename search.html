@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <title>Search</title>
+
+    <style>
+      input,
+      select,
+      textarea {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 20px;
+        margin-top: 10px;
+        border: 0.5px solid black;
+        border-radius: 7px;
+      }
+
+      .details {
+        margin-top: 60px;
+        background-color: #387970;
+        height: 100vh;
+        width: 100vw;
+      }
+
+      .details h1 {
+        text-align: center;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 10px;
+        font-weight: 200;
+      }
+
+      .store img {
+        width: 300px;
+        opacity: 0.8;
+      }
+
+      .store {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: space-between;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+      }
+
+      .store .desc {
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+      }
+
+      .desc a {
+        color: inherit;
+        margin-bottom: 1rem;
+        display: block;
+      }
+
+      .radio-btn label {
+        margin-right: 15px;
+      }
+
+      .video {
+        text-align: center;
+        padding: 50px;
+      }
+
+      .video p {
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        color: #387970;
+      }
+
+      .circle {
+        background-color: #387970;
+        width: 70px;
+        height: 100px;
+      }
+
+      #c1 {
+        position: absolute;
+        left: 238px;
+        top: 953px;
+      }
+
+      #c2 {
+        position: absolute;
+        right: 238px;
+        top: 953px;
+      }
+
+      #feedback-desc {
+        background-color: #387970;
+        padding: 10px;
+        height: 20px;
+        color: white;
+        border-radius: 20px;
+        text-align: center;
+      }
+
+      .product {
+        background-color: #387970;
+        padding-top: 60px;
+        height: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: white;
+      }
+
+      .product table {
+        width: 500px;
+        margin: auto;
+        text-align: center;
+        font-size: 18px;
+      }
+
+      .toggle {
+        background-color: #e8bf55;
+        height: 40px;
+        width: 70px;
+        border-radius: 20px;
+        margin: 2rem;
+      }
+
+      #toggle-btn {
+        margin: 0;
+        height: 40px;
+        float: left;
+        width: 40px;
+        border-radius: 20px;
+      }
+
+      #toggle-btn-right {
+        margin: 0;
+        height: 40px;
+        float: right;
+        width: 40px;
+        border-radius: 20px;
+      }
+
+      #maps-btn {
+        margin: auto;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        text-align: center;
+        display: flex !important;
+      }
+
+      #animated-line {
+        background-color: #387970;
+        height: 10px;
+        width: 200px;
+        border-radius: 5px;
+        margin: auto;
+      }
+
+      li {
+        display: inline;
+        background-color: lightblue;
+        border-radius: 40px;
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+    </style>
+
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        $("*").css("font-family", "Courier New");
+
+        $("p:first-child").hover(
+          function () {
+            $(this).css("color", "#a091d6");
+          },
+          function () {
+            $(this).css("color", "white");
+          }
+        );
+
+        $("div").filter(".contact").css("background-color", "#f0f0e4");
+        $("div").filter(".contact").css("padding", "2rem");
+
+        $(".product table caption").css("text-transform", "uppercase");
+        $(".product table caption").css("margin-bottom", "1rem");
+        $(".product table caption").css("font-size", "20px");
+
+        $("div:nth-child(2) table tr").hover(
+          function () {
+            $(this).css("background-color", "#a091d6");
+          },
+          function () {
+            $(this).css("background-color", "transparent");
+          }
+        );
+
+        $("tr:even").hover(
+          function () {
+            $(this).css("background-color", "#e8bf55");
+          },
+          function () {
+            $(this).css("background-color", "transparent");
+          }
+        );
+
+        $("td:nth-child(2), th:nth-child(2)").css("text-align", "left");
+
+        $(":button").css("background-color", "#a091d6");
+        $(":button").css("display", "inline");
+
+        $("#toggle-btn-right").hide();
+
+        $("#animated-line").hover(
+          function () {
+            $(this).animate({ width: "600px" });
+          },
+          function () {
+            $(this).animate({ width: "100px" });
+          }
+        );
+
+        $('input[id="fname"]').focus(function () {
+          $("#first-name").fadeOut();
+        });
+
+        $('input[id="lname"]').focus(function () {
+          $("#last-name").fadeOut();
+        });
+
+        $('input[id="address"]').focus(function () {
+          $("#address-input").fadeOut();
+        });
+
+        $("ul li:eq(1)").css("background-color", "lightgray");
+      });
+
+      $(function () {
+        $("#fname").change(function () {
+          $(this).css("text-transform", "uppercase");
+        });
+
+        $("#step1").click(function () {
+          $("#delivery1").slideUp();
+          $("#delivery2 p").remove();
+          $("#delivery2")
+            .show()
+            .append("<p>*Please fill the form properly</p>");
+          $("#delivery2").show().prepend("<p>PRODUCT FORM (Step 2)</p>");
+        });
+
+        $("#step2").click(function () {
+          $("#delivery2").fadeOut().hide();
+          $("#delivery1").fadeIn().show();
+          $("#first-name").slideDown(700);
+          $("#last-name").slideDown(700);
+          $("#address-input").slideDown(700);
+        });
+
+        $("#toggle-btn").click(function () {
+          $(this).hide();
+          $("#toggle-btn-right").show();
+          $("table").animate({ height: "toggle" }, "slow");
+          $(".product").css("height", "auto");
+        });
+
+        $("#toggle-btn-right").click(function () {
+          $(this).hide();
+          $("#toggle-btn").show();
+          $("table").show();
+          $(".product").css("height", "400px");
+        });
+
+        $("#maps-btn").click(function () {
+          $("#maps").slideToggle();
+          $("p:empty").text("Toggle!").css("text-align", "center");
+        });
+      });
+
+      $(function () {
+        $("#country").change(function () {
+          var param = "iso=" + $("#country").val();
+          console.log('param', param);
+          $.get(
+            "http://www.randyconnolly.com/funwebdev/services/travel/cities.php",
+            param
+          )
+            .done(function (data) {
+              var select = $("<select id='city'></select>");
+              // alternate way to loop through an array using jquery $.each() method
+              $.each(data, function (index, city) {
+                select.append(
+                  '<option value=' + city.name + '>' + city.name + "</option>"
+                );
+              });
+              $("#results").empty().append('<label for="city">City Name</label>');
+              $("#results").append(select);
+            })
+            .fail(function (jqXHR) {
+              alert("Error: " + jqXHR.status);
+            })
+            .always(function () {
+              console.log("service cities request finished");
+            });
+        });
+      });
+
+      $(function() {
+        $("#city-map").click(function(){
+          var param = "iso=" + $("#country").val();
+          var countryName = $("#city").find(":selected").val();
+          if(!countryName) {
+            alert('Please select a city.');
+            return;
+          }
+          var latitude, longitude;
+          $.get(
+            "http://www.randyconnolly.com/funwebdev/services/travel/cities.php",
+            param
+          ).done(function (data){
+            console.log(data);
+            $.each(data, function (index, city) {
+              if(city.name == countryName){
+                latitude = city.latitude;
+                longitude = city.longitude;
+              }
+            });
+          }).always(function () {
+            const url = 'https://www.google.com/maps/search/?api=1&query=' + latitude + ',' + longitude;
+            window.open(url);
+          });
+        });
+      });
+
+      function upperCase() {
+        const text = document.getElementById("fname");
+        text.value = text.value.toUpperCase();
+      }
+
+      function addHover() {
+        document
+          .getElementById("feedback")
+          .addEventListener("mouseover", function () {
+            document.getElementById("feedback-desc").innerHTML =
+              "Your input matters.";
+          });
+      }
+
+      function removeText() {
+        const myText = document.getElementById("feedback");
+        myText.remove();
+      }
+    </script>
+  </head>
+  <body>
+    <div class="top-nav">
+      <img src="Logo/logo_text.png" alt="Delico" id="header-logo" />
+      <div class="menu-bar">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#special">Special</a>
+        <a href="search.html">Search</a>
+        <a href="game.html">Game</a>
+        <a href="contact-us.html">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="product">
+      <table>
+        <caption>
+          Menu Recommendation and Review
+        </caption>
+        <tr>
+          <th>No.</th>
+          <th>Menu</th>
+          <th>Rating</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Roasted Pork</td>
+          <td>5/5</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Tteokbokki</td>
+          <td>4.8/5</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Spicy Chicken Ramyeon</td>
+          <td>4.5/5</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Bibimbab</td>
+          <td>4.1/5</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Korean Hotdog</td>
+          <td>4.0/5</td>
+        </tr>
+      </table>
+      <div>
+        <div class="toggle">
+          <input type="button" id="toggle-btn" />
+          <input type="button" id="toggle-btn-right" />
+        </div>
+      </div>
+    </div>
+
+    <div class="contact" id="delivery1">
+      <p id="feedback-desc">Delivery Request (Step 1)</p>
+      <ul>
+        <li id="first-name">First Name</li>
+        <li id="last-name">Last Name</li>
+        <li id="address-input">Address</li>
+      </ul>
+      <div>
+        <label for="fname">First Name</label>
+        <input
+          type="text"
+          name="fname"
+          id="fname"
+          placeholder="Please enter your first name."
+          required
+        />
+        <label for="lname">Last Name</label>
+        <input
+          type="text"
+          name="lname"
+          id="lname"
+          placeholder="Please enter your last name."
+          required
+        />
+        <label for="address">Address</label>
+        <input
+          type="text"
+          name="address"
+          id="address"
+          placeholder="Please enter your email address."
+          required
+        />
+      </div>
+      <input type="submit" value="Step 2 >" id="step1" />
+    </div>
+
+    <div class="contact" id="delivery2" hidden>
+      <p id="feedback-desc">Delivery Request (Step 2)</p>
+      <div>
+        <label for="pname">Product Name</label>
+        <input
+          type="text"
+          name="pname"
+          id="pname"
+          placeholder="Please enter product name."
+          required
+        />
+        <label for="quantity">Quantity</label>
+        <input
+          type="number"
+          name="quantity"
+          id="quantity"
+          placeholder="Please enter quantity."
+          required
+        />
+        <label for="notes">Notes</label>
+        <input
+          type="text"
+          name="notes"
+          id="notes"
+          placeholder="Please enter description."
+          required
+        />
+      </div>
+      <input type="submit" value="&lt; Step 1" id="step2" />
+    </div>
+
+    <button id="maps-btn">Toggle Maps</button>
+    <div><p></p></div>
+
+    <div id="animated-line"></div>
+    <div class="contact" id="maps">
+      <p id="feedback-desc">DELICO Maps</p>
+      <div>
+        <label for="fname">Country Name</label>
+        <select id="country">
+          <option value="0">Select a country</option>
+          <option value="CA">Canada</option>
+          <option value="FR">France</option>
+          <option value="DE">Germany</option>
+          <option value="IT">Italy</option>
+          <option value="US">United States</option>
+        </select>
+      </div>
+      <div id="results"></div>
+      <input type="submit" value="City Map" id="city-map"/>
+    </div>
+  </body>
+</html>

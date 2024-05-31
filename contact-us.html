@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <title>Contact Us</title>
+
+    <style>
+      input,
+      select,
+      textarea {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 20px;
+        margin-top: 10px;
+        border: 0.5px solid black;
+        border-radius: 7px;
+      }
+
+      .details {
+        margin-top: 60px;
+        background-color: #387970;
+        height: 100vh;
+        width: 100vw;
+      }
+
+      .details h1 {
+        text-align: center;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 10px;
+        font-weight: 200;
+      }
+
+      .store img {
+        width: 300px;
+        opacity: 0.8;
+      }
+
+      .store {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: space-between;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+      }
+
+      .store .desc {
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+      }
+
+      .desc a {
+        color: inherit;
+        margin-bottom: 1rem;
+        display: block;
+      }
+
+      .radio-btn label {
+        margin-right: 15px;
+      }
+
+      .video {
+        text-align: center;
+        padding: 50px;
+      }
+
+      .video p {
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        color: #387970;
+      }
+
+      .circle {
+        background-color: #387970;
+        width: 70px;
+        height: 100px;
+      }
+
+      #c1 {
+        position: absolute;
+        left: 238px;
+        top: 953px;
+      }
+
+      #c2 {
+        position: absolute;
+        right: 238px;
+        top: 953px;
+      }
+
+      #feedback-desc {
+        background-color: #387970;
+        padding: 10px;
+        height: 20px;
+        color: white;
+        border-radius: 20px;
+        text-align: center;
+      }
+    </style>
+
+    <script>
+      function upperCase() {
+        const text = document.getElementById("fname");
+        text.value = text.value.toUpperCase();
+      }
+
+      function addHover() {
+        document.getElementById("feedback").addEventListener("mouseover", function() {
+          document.getElementById("feedback-desc").innerHTML = "Your input matters.";
+        })
+      }
+
+      function removeText(){
+        const myText = document.getElementById("feedback");
+        myText.remove();
+      }
+    </script>
+  </head>
+  <body onload="addHover()">
+    <div class="top-nav">
+      <img src="Logo/logo_text.png" alt="Delico" id="header-logo" />
+      <div class="menu-bar">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#special">Special</a>
+        <a href="search.html">Search</a>
+        <a href="game.html">Game</a>
+        <a href="contact-us.html">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="details">
+      <h1>Visit Our Shop</h1>
+      <div class="store">
+        <img src="Images/storephoto.jpeg" alt="store" />
+
+        <div class="desc">
+          <p>...</p>
+          <a
+            href="https://www.google.com/maps/place/Stuart+Park/@-34.4112019,150.8988341,16.09z/data=!4m5!3m4!1s0x6b131904d8f809f1:0xf017d68f9f26ad0!8m2!3d-34.4104037!4d150.8990246"
+            target="_blank"
+          >
+            21 Crown Street, Fairy Meadow<br />Wollongong, NSW 2500
+          </a>
+          <a href="mailto:contactusdeli@delico.com">contactusdeli@delico.com</a>
+          <p>@delicolicious.co</p>
+          <p>0123456789</p>
+          <p>...</p>
+        </div>
+
+        <img src="Images/storephoto.jpeg" alt="store" />
+      </div>
+    </div>
+
+    <div class="video" id="explore">
+      <!-- the video size is too large -->
+      <!-- <video width="600" controls>
+        <source src="Video/koreacinematic.mp4" type="video/mp4">
+      </video> -->
+      <iframe src="https://www.youtube.com/embed/f7OlPu3s_E0" width="570" height="320" frameborder="0"></iframe>
+      <div class="circle" id="c1" onclick="removeText()"></div>
+      <div class="circle" id="c2" onclick="removeText()"></div>
+      <p>Explore South Korea</p>
+    </div>
+
+    <div class="contact">
+      <h1 style="color: #387970" id="feedback">Feedback</h1>
+      <p id="feedback-desc">Why we need feedback?</p>
+      <div>
+        <label for="fname">First Name</label>
+        <input
+          type="text"
+          name="fname"
+          id="fname"
+          placeholder="Please enter your first name."
+          required
+          onchange="upperCase()"
+        />
+        <label for="lname">Last Name</label>
+        <input
+          type="text"
+          name="lname"
+          id="lname"
+          placeholder="Please enter your last name."
+          required
+        />
+        <label for="email">Email</label>
+        <input
+          type="email"
+          name=""
+          id="email"
+          placeholder="Please enter your email address."
+          required
+        />
+      </div>
+      <div class="field d-flex">
+        <div>
+          <label for="country">Country</label>
+          <select name="country" id="country">
+            <option value="AU">Australia</option>
+            <option value="IDN">Indonesia</option>
+            <option value="NZ">New Zealand</option>
+            <option value="CN">Canada</option>
+          </select>
+        </div>
+        <div class="w-100">
+          <label for="phone">Phone</label>
+          <input
+            type="tel"
+            name="phone"
+            id="phone"
+            placeholder="Please enter your phone number."
+            required
+          />
+        </div>
+      </div>
+      <div>
+        <label for="fav">Favourite Menu</label>
+        <select name="fav" id="fav">
+          <option value="rpork">Roasted Pork</option>
+          <option value="dalgona">Dalgona Coffee</option>
+          <option value="nsoup">Noodle Soup</option>
+          <option value="sspork">Sweet and Sour Pork</option>
+          <option value="alatte">Americano Latte</option>
+          <option value="kchicken">Korean Chicken</option>
+          <option value="kimchi">Kimchi Fried Rice</option>
+        </select>
+      </div>
+      <label>Do you enjoy your experience at Delico?</label>
+      <div class="radio-btn">
+        <input type="radio" id="yes" name="enjoy" />
+        <label for="yes">Yes</label>
+        <input type="radio" id="no" name="enjoy" />
+        <label for="no">No</label>
+      </div>
+      <div>
+        <label for="question">Tell us your experience</label>
+        <textarea
+          name="question"
+          id="question"
+          cols="30"
+          rows="10"
+          placeholder="Type something here..."
+        ></textarea>
+      </div>
+      <input type="submit" value="Submit">
+    </div>
+  </body>
+</html>
